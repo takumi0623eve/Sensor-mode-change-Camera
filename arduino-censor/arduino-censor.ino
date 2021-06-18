@@ -66,7 +66,7 @@ void loop(){
       if(mode > 4) mode = 0;     //モード5より大きいならモード1に
       f = 0;                     //スライド判定をなくす
       //Serial.println(mode);
-      delay(200);
+      delay(20);
     }
   }else if(f == 2){               //左スライド中で
     if(dis_1 <= 100.0){           //①が10mm以下なら
@@ -76,7 +76,7 @@ void loop(){
       if(mode < 0) mode = 4;      //モード1より小さいならモード5に
       f = 0;                      //スライド判定をなくす
       //Serial.println(mode);
-      delay(200);
+      delay(20);
     }
   }
 
@@ -89,20 +89,21 @@ void loop(){
   }
   delay(20);
   
-  if((dis_1 > 50.0 && dis_1 <= 200.0) && (dis_2 > 50.0 && dis_2 <= 200.0)){ //両方のセンサが反応したら
+  if(dis_1 > 150.0 && dis_1 <= 250.0 && dis_2 > 150.0 && dis_2 <= 250.0){ //両方のセンサが反応したら
     cnt ++;                             //回数カウント
-    if(cnt > 2){                        //２回以上だったら                
-      Serial.println(cnt + 10);
+    if(cnt > 2){                        //２回以上だったら
+      sum = 10 + cnt;
+      Serial.println(sum);
       delay(200);
       f = 0;
     }
     if(cnt > 12){
       Serial.println(50);
       cnt = 0;
-      delay(2000);
+      delay(600);
     }
   }else if(cnt > 0){
     cnt = 0;
-    Serial.print(11);
+    Serial.print(10);
   }
 }

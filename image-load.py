@@ -48,19 +48,19 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = cv2.flip(frame, 1)
             cv2.putText(frame, ' Basic', (0, 50),
                         cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            if save_photo > 10 and save_photo < 23:
-                cv2.putText(frame, str(23 - save_photo), (0, 100),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             if (LorR == 71):
-                cv2.putText(frame, ' L to R', (0, 150),
+                cv2.putText(frame, ' Lefting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif (LorR == 72):
-                cv2.putText(frame, ' R to L', (0, 150),
+                cv2.putText(frame, ' Righting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif(LorR == 70):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+            if(save_photo >= 10 and save_photo <50):
+                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             cv2.imshow(window_name, frame)
         elif mode == 1:
@@ -69,38 +69,38 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.putText(frame, ' Gray', (0, 50),
                         cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            if save_photo > 10 and save_photo < 20:
-                cv2.putText(frame, str(23 - save_photo), (0, 100),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             if (LorR == 71):
-                cv2.putText(frame, ' L to R', (0, 150),
+                cv2.putText(frame, ' Lefting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif (LorR == 72):
-                cv2.putText(frame, ' R to L', (0, 150),
+                cv2.putText(frame, ' Righting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif(LorR == 70):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            
+            if(save_photo >= 10  and save_photo <50):
+                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             cv2.imshow(window_name, frame)
         elif mode == 2:
             ret, frame = cap.read()
             cv2.putText(frame, ' Miror', (0, 50),
                         cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            if save_photo > 10 and save_photo < 23:
-                cv2.putText(frame, str(23 - save_photo), (0, 100),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             if (LorR == 71):
-                cv2.putText(frame, ' L to R', (0, 150),
+                cv2.putText(frame, ' Lefting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif (LorR == 72):
-                cv2.putText(frame, ' R to L', (0, 150),
+                cv2.putText(frame, ' Righting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif(LorR == 70):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            
+            if(save_photo >= 10  and save_photo <50):
+                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             cv2.imshow(window_name, frame)
 
@@ -110,19 +110,19 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = cv2.GaussianBlur(frame, (21, 21), 10)
             cv2.putText(frame, ' Bura', (0, 50),
                         cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            if save_photo > 10 and save_photo < 23:
-                cv2.putText(frame, str(23 - save_photo), (0, 100),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             if (LorR == 71):
-                cv2.putText(frame, ' L to R', (0, 150),
+                cv2.putText(frame, ' Lefting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif (LorR == 72):
-                cv2.putText(frame, ' R to L', (0, 150),
+                cv2.putText(frame, ' Righting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif(LorR == 70):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            
+            if(save_photo >= 10 and save_photo <50):
+                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             cv2.imshow(window_name, frame)
 
@@ -132,19 +132,19 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = 255 - frame
             cv2.putText(frame, ' Color inversion', (0, 50),
                         cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
-            if save_photo > 10 and save_photo < 23:
-                cv2.putText(frame, str(23 - save_photo), (0, 100),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             if (LorR == 71):
-                cv2.putText(frame, ' L to R', (0, 150),
+                cv2.putText(frame, ' Lefting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif (LorR == 72):
-                cv2.putText(frame, ' R to L', (0, 150),
+                cv2.putText(frame, ' Righting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif(LorR == 70):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            
+            if(save_photo >= 10  and save_photo <50):
+                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             cv2.imshow(window_name, frame)
         elif mode == 5:
@@ -154,19 +154,19 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = anime_filter(frame)
             cv2.putText(frame, ' anime', (0, 50),
                         cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            if save_photo > 10 and save_photo < 23:
-                cv2.putText(frame, str(23 - save_photo), (0, 100),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             if (LorR == 71):
-                cv2.putText(frame, ' L to R', (0, 150),
+                cv2.putText(frame, ' Lefting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif (LorR == 72):
-                cv2.putText(frame, ' R to L', (0, 150),
+                cv2.putText(frame, ' Righting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             elif(LorR == 70):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+            if(save_photo >= 10  and save_photo <50):
+                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
             cv2.imshow(window_name, frame)
 
@@ -174,9 +174,10 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
         # if key == ord('c'):
 
         if save_photo == 50:
+            cv2.putText(frame, ' Saved', (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             ret, frame = cap.read()
             cv2.imwrite('{}_{}.{}'.format(base_path, n, ext), frame)
-            img_path = "/Users/satoutakumi/Desktop/test/img/camera_capture_" + \
+            img_path = "/Users/satoutakumi/Desktop/Censor-mode-change-Camera/Sensor-mode-change-Camera/img/camera_capture_" + \
                 str(n) + ".jpg"
             if mode == 0:
                 img = cv2.imread(img_path, -1)
@@ -202,7 +203,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             cv2.imwrite(img_path, img)
             #cv2.imshow('image', img)
             n += 1
-            save_photo = -1
+            save_photo = 9
 
         elif key == ord('q'):
             break
@@ -211,9 +212,9 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
         data = int(repr(val_arduino.decode())[1:-5])
         if(data < 10):
             mode = data
-        elif(data > 11 and data < 70):
-            cv2.putText(frame, str(23 - save_photo), (0, 100),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+        elif(data >= 10 and data < 70):
+            save_photo = data
+            #cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
         elif(data >= 70):
             LorR = data
 
@@ -221,5 +222,5 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
 
 save_frame_camera_key(
-    0, '/Users/satoutakumi/Desktop/test/img', 'camera_capture')
+    0, '/Users/satoutakumi/Desktop/Censor-mode-change-Camera/Sensor-mode-change-Camera/img', 'camera_capture')
 ser.close()
