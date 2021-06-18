@@ -26,6 +26,37 @@ def anime_filter(img):
     # 差分を返す
     return cv2.subtract(img, edge)
 
+def top_texts(frame):
+    cv2.putText(frame, 'Basic', (0, 50),
+                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
+    cv2.putText(frame, 'Gray', (110, 50),
+                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
+    cv2.putText(frame, 'Mirror', (200, 50),
+                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
+    cv2.putText(frame, 'Bura', (310, 50),
+                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
+    cv2.putText(frame, 'Color_inversion', (400, 50),
+                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
+
+def slide_mode(LorR ,frame):
+    if (LorR == 71):
+                cv2.putText(frame, ' <--', (0, 150),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    elif (LorR == 72):
+                cv2.putText(frame, ' -->', (0, 150),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    elif(LorR == 70):
+                cv2.putText(frame, ' Waiting', (0, 150),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+def countdown_save(save_photo,frame):
+    if(save_photo >= 10 and save_photo <50):
+                cv2.putText(frame, str(24 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+
+
+
+
 
 def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, window_name='frame'):  # カメラ保存用
     cap = cv2.VideoCapture(device_num)
@@ -46,61 +77,45 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
         if mode == 0:
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
-            cv2.putText(frame, ' Basic', (0, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
-            if (LorR == 71):
-                cv2.putText(frame, ' Lefting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif (LorR == 72):
-                cv2.putText(frame, ' Righting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif(LorR == 70):
-                cv2.putText(frame, ' Waiting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            cv2.putText(frame, 'Basic', (0, 50),
+                        cv2.FONT_ITALIC, 1, (255, 255, 255), 7)
 
-            if(save_photo >= 10 and save_photo <50):
-                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            top_texts(frame)
+
+            slide_mode(LorR,frame)
+
+            countdown_save(save_photo,frame)
 
             cv2.imshow(window_name, frame)
         elif mode == 1:
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            cv2.putText(frame, ' Gray', (0, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
-            if (LorR == 71):
-                cv2.putText(frame, ' Lefting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif (LorR == 72):
-                cv2.putText(frame, ' Righting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif(LorR == 70):
-                cv2.putText(frame, ' Waiting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            cv2.putText(frame, 'Gray', (110, 50),
+                        cv2.FONT_ITALIC, 1, (255, 255, 255), 7)
+
+            top_texts(frame)
             
-            if(save_photo >= 10  and save_photo <50):
-                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+            slide_mode(LorR,frame)
+            
+            countdown_save(save_photo,frame)
 
             cv2.imshow(window_name, frame)
         elif mode == 2:
             ret, frame = cap.read()
-            cv2.putText(frame, ' Miror', (0, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
-            if (LorR == 71):
-                cv2.putText(frame, ' Lefting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif (LorR == 72):
-                cv2.putText(frame, ' Righting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif(LorR == 70):
-                cv2.putText(frame, ' Waiting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            cv2.putText(frame, 'Mirror', (200, 50),
+                        cv2.FONT_ITALIC, 1, (255, 255, 255), 7)
+
+            top_texts(frame)
             
-            if(save_photo >= 10  and save_photo <50):
-                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+            slide_mode(LorR,frame)
+            
+            countdown_save(save_photo,frame)
 
             cv2.imshow(window_name, frame)
 
@@ -108,21 +123,16 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             frame = cv2.GaussianBlur(frame, (21, 21), 10)
-            cv2.putText(frame, ' Bura', (0, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
-            if (LorR == 71):
-                cv2.putText(frame, ' Lefting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif (LorR == 72):
-                cv2.putText(frame, ' Righting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif(LorR == 70):
-                cv2.putText(frame, ' Waiting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            cv2.putText(frame, 'Bura', (310, 50),
+                        cv2.FONT_ITALIC, 1, (255, 255, 255), 7)
             
-            if(save_photo >= 10 and save_photo <50):
-                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            top_texts(frame)
+            
+
+            slide_mode(LorR,frame)
+            
+            countdown_save(save_photo,frame)
 
             cv2.imshow(window_name, frame)
 
@@ -130,21 +140,16 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             frame = 255 - frame
-            cv2.putText(frame, ' Color inversion', (0, 50),
-                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
 
-            if (LorR == 71):
-                cv2.putText(frame, ' Lefting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif (LorR == 72):
-                cv2.putText(frame, ' Righting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif(LorR == 70):
-                cv2.putText(frame, ' Waiting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            cv2.putText(frame, 'Color_inversion', (400, 50),
+                        cv2.FONT_ITALIC, 1, (255, 255, 255), 7)
+
+            top_texts(frame)
             
-            if(save_photo >= 10  and save_photo <50):
-                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+
+            slide_mode(LorR,frame)
+            
+            countdown_save(save_photo,frame)
 
             cv2.imshow(window_name, frame)
         elif mode == 5:
@@ -153,20 +158,12 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             # 画像のアニメ絵化
             frame = anime_filter(frame)
             cv2.putText(frame, ' anime', (0, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+                        cv2.FONT_ITALIC, 1, (255, 255, 255), 7)
 
-            if (LorR == 71):
-                cv2.putText(frame, ' Lefting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif (LorR == 72):
-                cv2.putText(frame, ' Righting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            elif(LorR == 70):
-                cv2.putText(frame, ' Waiting', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            slide_mode(LorR,frame)
 
-            if(save_photo >= 10  and save_photo <50):
-                cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+            countdown_save(save_photo,frame)
+
 
             cv2.imshow(window_name, frame)
 
