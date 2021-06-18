@@ -49,9 +49,9 @@ def slide_mode(LorR ,frame):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
-def countdown_save(save_photo,frame):
-    if(save_photo >= 10 and save_photo <50):
-                cv2.putText(frame, str(24 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+def countdown_save(save_photo_max,frame):
+    if(save_photo_max >= 10 and save_photo_max <50):
+        cv2.putText(frame, str(40 - save_photo_max), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
 
 
@@ -70,6 +70,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
     n = 0
     save_photo = 0
     LorR = 70
+    save_photo_max = 0
 
     while True:
         # print(f)
@@ -85,7 +86,15 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
 
-            countdown_save(save_photo,frame)
+            if(save_photo > save_photo_max):
+                save_photo_max = save_photo
+                countdown_save(save_photo_max,frame)
+            elif(save_photo <= save_photo_max or save_photo == 10):
+                save_photo_max = 10
+                countdown_save(save_photo_max,frame)
+            
+            if(save_photo == 50):
+                save_photo_max = 10
 
             cv2.imshow(window_name, frame)
         elif mode == 1:

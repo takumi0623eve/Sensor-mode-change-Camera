@@ -97,10 +97,10 @@ void loop(){
       delay(20);
       f = 0;
     }
-    if(cnt > 12){
+    if(cnt > 30){
       Serial.println(50);
       cnt = 0;
-      delay(600);
+      delay(300);
     }
   }else if(cnt > 0){
     cnt = 0;
