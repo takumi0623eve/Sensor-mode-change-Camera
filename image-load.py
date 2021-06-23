@@ -2,8 +2,9 @@
 import cv2
 import os
 import numpy as np
+import time
 import serial
-ser = serial.Serial('/dev/cu.usbmodem1201', 9600, timeout=None)
+ser = serial.Serial('/dev/cu.usbmodem1401', 9600, timeout=None)
 not_used = ser.readline()
 
 
@@ -49,9 +50,13 @@ def slide_mode(LorR ,frame):
                 cv2.putText(frame, ' Waiting', (0, 150),
                             cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
-def countdown_save(save_photo_max,frame):
-    if(save_photo_max >= 10 and save_photo_max <50):
-        cv2.putText(frame, str(40 - save_photo_max), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+def countdown_save(save_range,frame):
+    if (save_range != 100):
+        cv2.putText(frame, str(save_range), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    elif(save_range  >= 60 and save_range < 100):
+        cv2.putText(frame, str(100 - save_range), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    else:
+        cv2.putText(frame, ' Saved', (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
 
 
@@ -70,7 +75,8 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
     n = 0
     save_photo = 0
     LorR = 70
-    save_photo_max = 0
+    save_range = 300
+    f = 0
 
     while True:
         # print(f)
@@ -86,15 +92,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
 
-            if(save_photo > save_photo_max):
-                save_photo_max = save_photo
-                countdown_save(save_photo_max,frame)
-            elif(save_photo <= save_photo_max or save_photo == 10):
-                save_photo_max = 10
-                countdown_save(save_photo_max,frame)
-            
-            if(save_photo == 50):
-                save_photo_max = 10
+            countdown_save(save_range,frame)
 
             cv2.imshow(window_name, frame)
         elif mode == 1:
@@ -110,7 +108,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
             
-            countdown_save(save_photo,frame)
+            countdown_save(save_range,frame)
 
             cv2.imshow(window_name, frame)
         elif mode == 2:
@@ -124,7 +122,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
             
-            countdown_save(save_photo,frame)
+            countdown_save(save_range,frame)
 
             cv2.imshow(window_name, frame)
 
@@ -141,7 +139,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
             
-            countdown_save(save_photo,frame)
+            countdown_save(save_range,frame)
 
             cv2.imshow(window_name, frame)
 
@@ -158,7 +156,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
             
-            countdown_save(save_photo,frame)
+            countdown_save(save_range,frame)
 
             cv2.imshow(window_name, frame)
         elif mode == 5:
@@ -171,7 +169,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
 
             slide_mode(LorR,frame)
 
-            countdown_save(save_photo,frame)
+            countdown_save(save_range,frame)
 
 
             cv2.imshow(window_name, frame)
@@ -179,7 +177,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
         key = cv2.waitKey(delay) & 0xFF
         # if key == ord('c'):
 
-        if save_photo == 50:
+        if save_range == 100:
             cv2.putText(frame, ' Saved', (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
             ret, frame = cap.read()
             cv2.imwrite('{}_{}.{}'.format(base_path, n, ext), frame)
@@ -209,7 +207,9 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             cv2.imwrite(img_path, img)
             #cv2.imshow('image', img)
             n += 1
-            save_photo = 9
+            save_range = 300
+            f = 0
+            time.sleep(0.5)
 
         elif key == ord('q'):
             break
@@ -218,11 +218,23 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
         data = int(repr(val_arduino.decode())[1:-5])
         if(data < 10):
             mode = data
-        elif(data >= 10 and data < 70):
-            save_photo = data
-            #cv2.putText(frame, str(25 - save_photo), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-        elif(data >= 70):
+        elif(data >= 70 and data <= 72 ):
             LorR = data
+        elif(save_range > (int)(data / 100) and (int)(data / 100) > 100):
+            save_range = (int)(data / 100)
+            if(f == 0 and save_range >= 250 and save_range <= 200):
+                f = 1
+            elif(f == 1 and save_range < 190 and save_range > 140):
+                save_range = 60
+                f = 0
+            elif(f == 0 and save_range < 190 and save_range > 140):
+                f = 1
+        elif(save_range >= (int)(data / 100) and (int)(data / 100) > 100):
+            save_range = 300
+            f = 0
+            print(save_range)
+        if(save_range >= 60 and save_range < 100):
+            save_range += 1
 
     cv2.destroyWindow(window_name)
 

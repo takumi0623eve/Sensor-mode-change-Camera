@@ -10,6 +10,8 @@ int mode = 0; //現在のカメラのモード
 
 int cnt = 0;
 int sum = 0;
+int ave_range = 30000;
+int down_f = 0;
 
 void setup(){
   Serial.begin(9600);
@@ -88,22 +90,25 @@ void loop(){
     Serial.println(72);
   }
   delay(20);
-  
-  if(dis_1 > 150.0 && dis_1 <= 280.0 && dis_2 > 150.0 && dis_2 <= 280.0){ //両方のセンサが反応したら
-    cnt ++;                             //回数カウント
-    if(cnt > 5){                        //２回以上だったら
-      sum = 10 + cnt;
-      Serial.println(sum);
-      delay(20);
+
+  if(dis_1 > 200.0 && dis_1 <= 250.0 && dis_2 > 200.0 && dis_2 <= 250.0){ //両方のセンサが反応したら
+    if(ave_range > (int)(dis_1 + dis_2)/2){
+      ave_range = (int)(dis_1 + dis_2)/2 * 100;
+      Serial.println(ave_range);
+      down_f = 1;
+    }else{
       f = 0;
     }
-    if(cnt > 30){
-      Serial.println(50);
-      cnt = 0;
-      delay(300);
-    }
-  }else if(cnt > 0){
-    cnt = 0;
-    Serial.print(10);
   }
+
+  if(down_f == 1){
+    if(dis_1 > 140.0 && dis_1 <= 190.0 && dis_2 > 140.0 && dis_2 <= 190.0){ //両方のセンサが反応したら
+      if(ave_range > (int)(dis_1 + dis_2)/2){
+        ave_range = (int)(dis_1 + dis_2)/2 * 100;
+        Serial.println(ave_range);
+        down_f = 0;
+      }
+    }
+  }
+  delay(20); 
 }
