@@ -62,20 +62,17 @@ void loop(){
   }
   
   if(f == 1){                     //右スライド中で
-    if(dis_2 <= 100.0) {          //②が10mm以下なら
-      //Serial.println("L → R!");  //右スライドの判定完了
-      mode--; //モードを１増加
-      if(mode < 0) mode = 4;     //モード5より大きいならモード1に
+    if(dis_1 > 100.0 && dis_2 <= 100.0) {          //②が10mm以下なら
+      mode--; //モードを１減少
+      if(mode < 0) mode = 8;     //モード5より大きいならモード1に
       f = 0;                     //スライド判定をなくす
       //Serial.println(mode);
       delay(260);
     }
   }else if(f == 2){               //左スライド中で
-    if(dis_1 <= 100.0){           //①が10mm以下なら
-      Serial.println(mode);
-      //Serial.println("R → L!");   //左スライドの判定完了
-      mode++;                     //モードを1減少
-      if(mode > 4) mode = 0;      //モード1より小さいならモード5に
+    if(dis_1 <= 100.0 && dis_2 > 100.0){           //①が10mm以下なら
+      mode++;                     //モードを1増加
+      if(mode > 8) mode = 0;      //モード1より小さいならモード5に
       f = 0;                      //スライド判定をなくす
       //Serial.println(mode);
       delay(260);
