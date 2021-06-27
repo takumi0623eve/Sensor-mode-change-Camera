@@ -43,36 +43,35 @@ def top_texts(frame):
 
 #スライドモード表示
 def slide_mode(LorR ,frame):
-    if (LorR == 71):
-                cv2.putText(frame, ' <--', (0, 150),
-                            cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-                cv2.putText(frame, ' <--', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-    elif (LorR == 72):
-                cv2.putText(frame, ' -->', (0, 150),
-                            cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-                cv2.putText(frame, ' -->', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-    elif(LorR == 70):
-                cv2.putText(frame, 'Ready', (0, 150),
-                            cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-                cv2.putText(frame, 'Ready', (0, 150),
-                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    if(LorR == 5):
+        cv2.putText(frame, 'Ready', (0, 150),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
+        cv2.putText(frame, 'Ready', (0, 150),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    elif (LorR == 6):
+        cv2.putText(frame, ' <--', (0, 150),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
+        cv2.putText(frame, ' <--', (0, 150),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+    elif (LorR == 7):
+        cv2.putText(frame, ' -->', (0, 150),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
+        cv2.putText(frame, ' -->', (0, 150),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
 #カウントダウン表示
-def countdown_save(save_range,frame):
-    if (save_range > 100 or save_range < 40):
+def countdown_save(save_range,frame,width,height):
+    if(save_range == 90): #カウントダウン10のとき
+        text_x = int(width / 2 - width / 4  - width / 16)
+        text_y = int(height / 2 + height / 4)
+        cv2.putText(frame, str(100 - save_range), (text_x, text_y),cv2.FONT_ITALIC, 20, (0, 0, 0), 50)
+        cv2.putText(frame, str(100 - save_range), (text_x, text_y),cv2.FONT_ITALIC, 20, (255, 255, 255), 48)
+    elif(save_range >= 91 and save_range < 100): #カウントダウン1 ~ 9のとき
+        text_x = int(width / 2 - width / 4 + width / 8 - width / 16)
+        text_y = int(height / 2 + height / 4)
+        cv2.putText(frame, str(100 - save_range), (text_x, text_y),cv2.FONT_ITALIC, 20, (0, 0, 0), 50)
+        cv2.putText(frame, str(100 - save_range), (text_x, text_y),cv2.FONT_ITALIC, 20, (255, 255, 255), 48)
+    elif(save_range == 100): #カウントダウン終了時
+        frame = cv2.circle(frame,(int((width - 1) / 2),int((height - 1) / 2)), int(width), (32,32,32), -1)
+        for num in range(int(width)):
+                frame = cv2.circle(frame,(int((width - 1) / 2),int((height - 1) / 2)),int(width  - num),(int(63 * (width / (num + 1)) - 63),int(63 * (width / (num + 1)) - 63),int(63 * (width / (num + 1)) - 63)),0)
+    else:
         cv2.putText(frame, "Distance:" + str(save_range), (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
         cv2.putText(frame, "Distance:" + str(save_range), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-    elif(save_range  >= 40 and save_range < 91):
-        cv2.putText(frame, "ShutterTime:" + str(100 - save_range), (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-        cv2.putText(frame, "ShutterTime:" + str(100 - save_range), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-    elif(save_range >= 91 and save_range < 100):
-        cv2.putText(frame, str(100 - save_range), (640 - 320 , 520),cv2.FONT_ITALIC, 20, (0, 0, 0), 50)
-        cv2.putText(frame, str(100 - save_range), (640 - 320, 520),cv2.FONT_ITALIC, 16, (255, 255, 255), 50)
-    else:
-        cv2.putText(frame, 'Saved', (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-        cv2.putText(frame, 'Saved', (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
 def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, window_name='frame'):  # カメラ保存用
     #動画ファイル読み込み
@@ -91,10 +90,16 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
     mode = 0
     n = 0
     save_photo = 0
-    LorR = 70
+    LorR = 5
     save_range = 300
+    save_range_prev = 300
+    save_range_cnt = 0
     f = 0
     cnt = 0
+    width = 0
+    height = 0
+    width = cap.get(3)
+    height = cap.get(4)
 
     while True:
         '''
@@ -108,15 +113,18 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             #動画反転
             frame = cv2.flip(frame, 1)
             
-            #全モード表示
-            top_texts(frame)
-            #文字表示
-            cv2.putText(frame, 'Basic', (0, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            #スライド状態表示
-            slide_mode(LorR,frame)
+            if(save_range < 90 or save_range >= 100):
+                #全モード表示
+                top_texts(frame)
+                #文字表示
+                cv2.putText(frame, 'Basic', (0, 50),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+                #スライド状態表示
+                slide_mode(LorR,frame)
+            
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
+            
             #動画表示
             cv2.imshow(window_name, frame)
         elif mode == 1:
@@ -126,15 +134,17 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = cv2.flip(frame, 1)
             #モード処理(グレー化)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            #全モード表示
-            top_texts(frame)
-            #文字表示
-            cv2.putText(frame, 'Gray', (110, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            #スライド状態表示
-            slide_mode(LorR,frame)
+            
+            if(save_range < 90 or save_range >= 100):
+                #全モード表示
+                top_texts(frame)
+                #文字表示
+                cv2.putText(frame, 'Gray', (110, 50),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+                #スライド状態表示
+                slide_mode(LorR,frame)
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
             #動画表示
             cv2.imshow(window_name, frame)
         elif mode == 2:
@@ -152,15 +162,17 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             #中央値フィルタ
             frame = cv2.medianBlur(frame,ksize)
 
-            #全モード表示
-            top_texts(frame)
-            #モード表示
-            cv2.putText(frame, 'Monochrome', (200, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            #スライド状態表示
-            slide_mode(LorR,frame)
+            if(save_range < 90 or save_range >= 100):
+                #全モード表示
+                top_texts(frame)
+                #モード表示
+                cv2.putText(frame, 'Monochrome', (200, 50),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+                #スライド状態表示
+                slide_mode(LorR,frame)
+            
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
 
             #動画表示
             cv2.imshow(window_name, frame)
@@ -171,15 +183,18 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = cv2.flip(frame, 1)
             #モード処理(ブラー)
             frame = cv2.GaussianBlur(frame, (21, 21), 10)
-            #全モード表示
-            top_texts(frame)
-            #文字表示
-            cv2.putText(frame, 'Blur', (410, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            #スライド状態表示
-            slide_mode(LorR,frame)
+            
+            if(save_range < 90 or save_range >= 100):
+                #全モード表示
+                top_texts(frame)
+                #文字表示
+                cv2.putText(frame, 'Blur', (410, 50),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+                #スライド状態表示
+                slide_mode(LorR,frame)
+            
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
             #動画表示
             cv2.imshow(window_name, frame)
         elif mode == 4:
@@ -189,15 +204,16 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             frame = cv2.flip(frame, 1)
             #モード処理(色反転)
             frame = 255 - frame
-            #全モード表示
-            top_texts(frame)
-            #文字表示
-            cv2.putText(frame, 'Color_inversion', (480, 50),
-                        cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
-            #スライド状態表示
-            slide_mode(LorR,frame)
+            if(save_range < 90 or save_range >= 100):
+                #全モード表示
+                top_texts(frame)
+                #文字表示
+                cv2.putText(frame, 'Color_inversion', (480, 50),
+                            cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+                #スライド状態表示
+                slide_mode(LorR,frame)
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
             #動画表示
             cv2.imshow(window_name, frame)
 
@@ -216,24 +232,27 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             #スライド状態表示
             slide_mode(LorR,frame)
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
             #動画表示
             cv2.imshow(window_name, frame)
         
-        elif mode == 5:
+        elif mode == 6:
             #動画読み込み
             ret, frame = cap.read()
             #動画反転
             frame = cv2.flip(frame, 1)
             
             frame = cv2.Canny(frame,127,127)
-            #文字表示
-            cv2.putText(frame, ' Edge', (0, 50),
-                        cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
-            #スライド状態表示
-            slide_mode(LorR,frame)
+            
+            if(save_range < 90 or save_range >= 100):
+                #文字表示
+                cv2.putText(frame, ' Edge', (0, 50),
+                            cv2.FONT_ITALIC, 1, (0, 0, 0), 3)
+                #スライド状態表示
+                slide_mode(LorR,frame)
+            
             #距離 and カウントダウン表示
-            countdown_save(save_range,frame)
+            countdown_save(save_range,frame,width,height)
             #動画表示
             cv2.imshow(window_name, frame)
 
@@ -307,9 +326,8 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
                 img = cv2.flip(img,1)
                 img = cv2.Canny(img,127,127)
 
-            #動画書き出し
+            #画像書き出し
             cv2.imwrite(img_path, img)
-            #cv2.imshow('image', img)
 
             #枚数カウント
             n += 1
@@ -317,46 +335,50 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             save_range = 300
             #距離の判定リセット
             f = 0
-            #処理停止
-            time.sleep(0.5)
+            #動画表示
+            cv2.imshow(window_name, frame)
+            time.sleep(0.00001)
+            cv2.imshow('image', img)
 
         #処理終了
         elif key == ord('q'):
             break
 
         #arduino IDEから値取得
-        val_arduino = ser.readline()
-        data = int(repr(val_arduino.decode())[1:-5])
+        if(f != 2):
+            val_arduino = ser.readline()
+            data = int(repr(val_arduino.decode())[1:-5])
 
-        #0~3なら動画モードに代入
-        if(data >= 0 and data < 6):
+        #0~4なら動画モードに代入
+        if(f != 2 and data >= 0 and data < 5):
             mode = data
-        #70~73なら左右スライドモードに代入
-        elif(data >= 70 and data <= 72 ):
+        #5~7なら左右スライドモードに代入
+        elif(f != 2 and data >= 5 and data <= 7 ):
             LorR = data
-        #100以上で前回の距離より小さいならなら距離(save_range)に代入
-        elif(save_range > (int)(data / 100) and (int)(data / 100) > 100):
+        #200以上で前回の距離より小さいならなら距離(save_range)に代入
+        elif(f == 0 and save_range >= 200 and save_range > (int)(data / 100) and (int)(data / 100) >= 200):
             save_range = (int)(data / 100)
-
-            #200 ~ 250なら距離判定のフラグを立てる
-            if(f == 0 and save_range >= 250 and save_range <= 200):
+            #200 ~ 240なら距離判定のフラグを立てる
+            if(save_range <= 240):
                 f = 1
-            #140 ~ 190で距離判定のフラグが立っているなら
-            elif(save_range < 190 and save_range > 140):
-                #カウントダウン用(60)を代入
-                save_range = 80
-        #100以上で前回の距離より大きいなら距離(save_range)をリセット
-        elif(save_range >= (int)(data / 100) and (int)(data / 100) > 200):
-            save_range = 300
-            #距離判定フラグリセット
-            f = 0
+                save_range_prev = save_range
+        elif(f == 1 and (int)(data / 100) >= 140 and (int)(data / 100) <= 190):
+            #カウントダウン用を代入
+                save_range = 90
+                f = 2
+        
+        if(f == 1 and save_range == save_range_prev):
+            save_range_cnt +=1
+            if(save_range_cnt == 10):
+                save_range = 300
+                save_range_cnt = 0
+                f = 0
+        
         #撮影カウントダウン
-        if(save_range >= 40 and save_range < 100):
-            save_range +=1
+        if(f == 2 and save_range >= 90 and save_range < 100):
             cnt += 1
-            if(cnt % 2 == 0):
-                save_range -=1
-    
+            if(cnt % 30 * 10 == 0):
+                save_range +=1
 
     cv2.destroyWindow(window_name)
 
