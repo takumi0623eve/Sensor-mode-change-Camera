@@ -362,7 +362,7 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             if(save_range <= 240):
                 f = 1
                 save_range_prev = save_range
-        elif(f == 1 and (int)(data / 100) >= 140 and (int)(data / 100) <= 190):
+        elif(f == 1 and (int)(data / 100) >= 150 and (int)(data / 100) <= 190):
             #カウントダウン用を代入
                 save_range = 90
                 f = 2

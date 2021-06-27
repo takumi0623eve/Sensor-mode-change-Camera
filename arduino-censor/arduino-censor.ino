@@ -7,7 +7,7 @@ const int T_2 = 5; //センサ②のトリガーが接続されているピン
 const float UtoD_top_1 = 240.0;    //上下スライド範囲①の最長判定距離[mm]
 const float UtoD_bottom_1 = 200.0; //上下スライド範囲①の最短判定距離[mm]
 const float UtoD_top_2 = 190.0;    //上下スライド範囲②の最長判定距離[mm]
-const float UtoD_bottom_2 = 140.0; //上下スライド範囲②の最短判定距離[mm]
+const float UtoD_bottom_2 = 150.0; //上下スライド範囲②の最短判定距離[mm]
 const float LorR_top = 80.0;       //左右スライドの最長判定距離[mm]
 const float LorR_bottom = 30.0;    //左右スライドの最長判定距離[mm]
 
@@ -83,7 +83,7 @@ void loop(){
   
   mode_change(dis_1,dis_2);    //モード判定
 
-  if(down_f == 0) {　　　　　　　       //上下スライド判定がないなら
+  if(down_f == 0) {                   //上下スライド判定がないなら
     Shutter_start_check(dis_1,dis_2); //上下スライドの開始判定
   }else{                              //あるなら
     Shutter_end_check(dis_1,dis_2);   //上下スライドの終了判定
