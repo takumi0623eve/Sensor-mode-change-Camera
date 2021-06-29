@@ -61,11 +61,11 @@ def countdown_save(shutter_cnt,frame,width,height):
 #距離表示
 def distance_text(up_to_down_range ,frame,width,height):
     if(up_to_down_range == 300):
-        cv2.putText(frame, "Please push", (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-        cv2.putText(frame, "Please push", (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+        cv2.putText(frame, "Push(30cm -> 15cm)", (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
+        cv2.putText(frame, "Push(30cm -> 15cm)", (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
     else:
-        cv2.putText(frame, "Distance:" + str(up_to_down_range ), (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
-        cv2.putText(frame, "Distance:" + str(up_to_down_range ), (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
+        cv2.putText(frame, "more push!", (0, 100),cv2.FONT_ITALIC, 1, (0, 0, 0), 5)
+        cv2.putText(frame, "more push!", (0, 100),cv2.FONT_ITALIC, 1, (255, 255, 255), 3)
 
 # モザイク処理
 def mosaic(img, alpha):
@@ -183,27 +183,27 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
             #カウントダウンのリセット
             shutter_cnt = 10
 
+        #arduino IDEから値取得
+        val_arduino = ser.readline()
+        data = int(repr(val_arduino.decode())[1:-5])
         if(shutter_f!= 2): #撮影モードではないなら
-            #arduino IDEから値取得
-            val_arduino = ser.readline()
-            data = int(repr(val_arduino.decode())[1:-5])
             
             if(data >= 0 and data < 5): #0 ~ 4 なら撮影モードに代入
                 mode = data
             elif(data >= 5 and data < 8): #5 ~ 7 なら左右モードに代入
                 LorR = data
 
-            if(shutter_f== 0 and up_to_down_range > (int)(data / 100) and (int)(data / 100) >= 200): #20cm以上で検出され上下判定がなく、以前の入力より短いなら
+            if(shutter_f == 0 and up_to_down_range > (int)(data / 100) and (int)(data / 100) >= 200): #20cm以上で検出され上下判定がなく、以前の入力より短いなら
                 #検出距離の更新
                 up_to_down_range = (int)(data / 100)
                 #上下スライド判定開始
                 shutter_f = 1
                 #前の検出距離情報の更新(代入)
-                up_to_down_range_prev  = up_to_down_range 
-            elif(shutter_f== 1): #上下スライド判定があるなら
-                if((int)(data / 100) >= 150 and (int)(data / 100) <= 190): #15cm ~ 19cm なら
+                up_to_down_range_prev  = up_to_down_range
+            elif(shutter_f == 1): #上下スライド判定があるなら
+                if((int)(data / 100) >= 140 and (int)(data / 100) <= 180): #15cm ~ 19cm なら
                     #上下スライド検出
-                   shutter_f= 2
+                   shutter_f = 2
                 if (up_to_down_range == up_to_down_range_prev ): #前の検出距離と現在の検出距離が同じなら
                     #同距離の検出回数を増加
                     up_to_down_range_cnt  +=1
@@ -213,9 +213,15 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
                         #同距離の検出回数のリセット
                         up_to_down_range_cnt  = 0
         else: #撮影カウントダウン
-            shutter_loop_cnt += 1
-            if(shutter_loop_cnt % 30 * 10 == 0):
-                shutter_cnt -=1
+            if(data == 6 or data == 7): #6 or 7ならキャンセル
+                shutter_f = 0
+                shutter_cnt = 10
+                shutter_loop_cnt = 0
+                up_to_down_range = 300
+            else:
+                shutter_loop_cnt += 1
+                if(shutter_loop_cnt % 15  == 0):
+                    shutter_cnt -=1
         
         #キー入力情報
         key = cv2.waitKey(delay) & 0xFF

@@ -4,10 +4,10 @@ const int T_1 = 3; //センサ①のトリガーが接続されているピン
 const int E_2 = 4; //センサ②のエコーが接続されているピン
 const int T_2 = 5; //センサ②のトリガーが接続されているピン
 
-const float UtoD_top_1 = 240.0;    //上下スライド範囲①の最長判定距離[mm]
+const float UtoD_top_1 = 250.0;    //上下スライド範囲①の最長判定距離[mm]
 const float UtoD_bottom_1 = 200.0; //上下スライド範囲①の最短判定距離[mm]
-const float UtoD_top_2 = 190.0;    //上下スライド範囲②の最長判定距離[mm]
-const float UtoD_bottom_2 = 150.0; //上下スライド範囲②の最短判定距離[mm]
+const float UtoD_top_2 = 180.0;    //上下スライド範囲②の最長判定距離[mm]
+const float UtoD_bottom_2 = 140.0; //上下スライド範囲②の最短判定距離[mm]
 const float LorR_top = 80.0;       //左右スライドの最長判定距離[mm]
 const float LorR_bottom = 30.0;    //左右スライドの最長判定距離[mm]
 
